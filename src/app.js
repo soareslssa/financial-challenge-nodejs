@@ -28,7 +28,7 @@ app.post("/balance/entry/", (request, response) => {
   return response.json(account);
 });
 
-app.post("/balance/entry/:id", (request, response) => {
+app.put("/balance/entry/:id", (request, response) => {
   
   const {value, description} = request.body;
   const {id} = request.params;
@@ -41,6 +41,27 @@ app.post("/balance/entry/:id", (request, response) => {
 
   accounts[accountIndex].balance += value;
   accounts[accountIndex].moviment = [...accounts[accountIndex].moviment, {type: "entrance", value, description}];
+ 
+  return response.json(accounts[accountIndex]);
+});
+
+app.put("/balance/out/:id", (request, response) => {
+  
+  const {value, description} = request.body;
+  const {id} = request.params;
+
+  const accountIndex = accounts.findIndex(account => account.id == id);
+
+  if (accountIndex < 0) {
+    return response.status(400).json({error: "account not found."});
+  }
+
+  if(accounts[accountIndex].balance <= 0){
+    return response.status(500).json({error: "the account does not have enough balance."});
+  }
+
+  accounts[accountIndex].balance -= value;
+  accounts[accountIndex].moviment = [...accounts[accountIndex].moviment, {type: "out", value, description}];
  
   return response.json(accounts[accountIndex]);
 });

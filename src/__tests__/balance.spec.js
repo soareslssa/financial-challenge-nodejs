@@ -7,15 +7,15 @@ describe("Balances", () => {
     const response = await request(app)
       .post("/balance/entry")
       .send({
-        value: "500.00",
+        value: 500.00,
         description: "university payment"
       });
 
     expect(isUuid(response.body.id)).toBe(true);
 
     expect(response.body).toMatchObject({
-      balance: "500.00",
-     moviment: [{type: "entrance", value: "500.00", description: "university payment"}]
+      balance: 500.00,
+     moviment: [{type: "entrance", value: 500.00, description: "university payment"}]
     });
   });
 });
@@ -24,7 +24,7 @@ it("should be able to list the accounts", async () => {
   const account = await request(app)
   .post("/balance/entry")
   .send({
-    value: "500.00",
+    value: 500.00,
     description: "university payment"
   });
 
@@ -34,9 +34,36 @@ it("should be able to list the accounts", async () => {
     expect.arrayContaining([
       {
         id: account.body.id,
-        balance: "500.00",
-        moviment: [{type: "entrance", value: "500.00", description: "university payment"}],
+        balance: 500.00,
+        moviment: [{type: "entrance", value: 500.00, description: "university payment"}],
       }
     ])
   );
+});
+
+it("should be able to include entry", async () => {
+  const account = await request(app)
+  .post("/balance/entry")
+  .send({
+    value: 500.00,
+    description: "university payment"
+  });
+
+  const response = await request(app)
+  .put(`/balance/entry/${account.body.id}`)
+  .send({
+    value: 300.00,
+    description: "grocery shopping"
+  });
+
+  expect(isUuid(response.body.id)).toBe(true);
+
+  expect(response.body).toMatchObject({
+    id: account.body.id,
+        balance: 800.00,
+        moviment: [
+          {type: "entrance", value: 500.00, description: "university payment"},
+          {type: "entrance", value: 300.00, description: "grocery shopping"}
+          ],
+  });
 });

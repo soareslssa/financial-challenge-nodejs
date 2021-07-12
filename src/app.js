@@ -56,7 +56,7 @@ app.put("/balance/out/:id", (request, response) => {
     return response.status(400).json({error: "account not found."});
   }
 
-  if(accounts[accountIndex].balance <= 0){
+  if((accounts[accountIndex].balance - value) < 0){
     return response.status(500).json({error: "the account does not have enough balance."});
   }
 

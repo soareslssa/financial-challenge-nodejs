@@ -10,8 +10,8 @@ app.use(cors());
 
 const accounts = [];
 
-app.get("/repositories", (request, response) => {
-  // TODO
+app.get("/accounts", (request, response) => {
+  return response.json(accounts);
 });
 
 app.post("/balance/entry/", (request, response) => {

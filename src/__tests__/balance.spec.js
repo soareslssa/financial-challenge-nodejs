@@ -19,3 +19,24 @@ describe("Balances", () => {
     });
   });
 });
+
+it("should be able to list the accounts", async () => {
+  const account = await request(app)
+  .post("/balance/entry")
+  .send({
+    value: "500.00",
+    description: "university payment"
+  });
+
+  const response = await request(app).get("/accounts");
+
+  expect(response.body).toEqual(
+    expect.arrayContaining([
+      {
+        id: account.body.id,
+        balance: "500.00",
+        moviment: [{type: "entrance", value: "500.00", description: "university payment"}],
+      }
+    ])
+  );
+});

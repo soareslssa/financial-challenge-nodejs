@@ -8,24 +8,41 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const balances = [];
+const accounts = [];
 
 app.get("/repositories", (request, response) => {
   // TODO
 });
 
-app.post("/balance/entry", (request, response) => {
+app.post("/balance/entry/", (request, response) => {
   // TODO Incluir lançamento de entrada - com valor positivo e descrição
-  const {account, value, description} = request.body;
+  const { value, description } = request.body;
 
-  const balance = {id: uuid(),account, value, description};
-  balances.push(balance);
+  const account = {
+    id: uuid(),
+    balance: value,
+    moviment: [{ type: "entrance", value, description }]
+  };
 
-  return response.json(balance);
+  accounts.push(account);
+  return response.json(account);
 });
 
-app.put("/repositories/:id", (request, response) => {
-  // TODO
+app.post("/balance/entry/:id", (request, response) => {
+  
+  const {value, description} = request.body;
+  const {id} = request.params;
+
+  const accountIndex = accounts.findIndex(account => account.id == id);
+
+  if (accountIndex < 0) {
+    return response.status(400).json({error: "account not found."});
+  }
+
+  accounts[accountIndex].balance += value;
+  accounts[accountIndex].moviment = [...accounts[accountIndex].moviment, {type: "entrance", value, description}];
+ 
+  return response.json(accounts[accountIndex]);
 });
 
 app.delete("/repositories/:id", (request, response) => {

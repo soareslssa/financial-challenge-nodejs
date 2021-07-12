@@ -7,7 +7,6 @@ describe("Balances", () => {
     const response = await request(app)
       .post("/balance/entry")
       .send({
-        account: "1272967-1",
         value: "500.00",
         description: "university payment"
       });
@@ -15,9 +14,8 @@ describe("Balances", () => {
     expect(isUuid(response.body.id)).toBe(true);
 
     expect(response.body).toMatchObject({
-      account: "1272967-1",
-      value: "500.00",
-      description: "university payment"
+      balance: "500.00",
+     moviment: [{type: "entrance", value: "500.00", description: "university payment"}]
     });
   });
 });

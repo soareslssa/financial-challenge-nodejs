@@ -67,3 +67,21 @@ it("should be able to include entry", async () => {
           ],
   });
 });
+
+it("The balance must never be negative", async () => {
+  const account = await request(app)
+    .post("/balance/entry")
+    .send({
+      value: 500.00,
+      description: "university payment"
+    });
+
+  const response = await request(app)
+    .put(`/balance/out/${account.body.id}`)
+    .send({
+      value: 600.00,
+      description: "grocery shopping"
+    });
+
+  expect(response.body).toMatchObject({ error: "the account does not have enough balance." });
+});

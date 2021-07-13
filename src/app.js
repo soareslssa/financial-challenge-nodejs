@@ -15,7 +15,6 @@ app.get("/accounts", (request, response) => {
 });
 
 app.post("/balance/entry/", (request, response) => {
-  // TODO Incluir lançamento de entrada - com valor positivo e descrição
   const { value, description } = request.body;
 
   const account = {
@@ -64,14 +63,6 @@ app.put("/balance/out/:id", (request, response) => {
   accounts[accountIndex].moviment = [...accounts[accountIndex].moviment, {type: "out", value, description}];
  
   return response.json(accounts[accountIndex]);
-});
-
-app.delete("/repositories/:id", (request, response) => {
-  // TODO
-});
-
-app.post("/repositories/:id/like", (request, response) => {
-  // TODO
 });
 
 module.exports = app;

@@ -68,6 +68,33 @@ it("should be able to include entry", async () => {
   });
 });
 
+it("should be able to include out", async () => {
+  const account = await request(app)
+  .post("/balance/entry")
+  .send({
+    value: 500.00,
+    description: "university payment"
+  });
+
+  const response = await request(app)
+  .put(`/balance/out/${account.body.id}`)
+  .send({
+    value: 300.00,
+    description: "grocery shopping"
+  });
+
+  expect(isUuid(response.body.id)).toBe(true);
+
+  expect(response.body).toMatchObject({
+    id: account.body.id,
+        balance: 200.00,
+        moviment: [
+          {type: "entrance", value: 500.00, description: "university payment"},
+          {type: "out", value: 300.00, description: "grocery shopping"}
+          ],
+  });
+});
+
 it("The balance must never be negative", async () => {
   const account = await request(app)
     .post("/balance/entry")

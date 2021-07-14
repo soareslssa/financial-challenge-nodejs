@@ -9,7 +9,7 @@ describe("Assets", () => {
       .send({
         name: "apple45",
         value: 100,
-        type: "teste"
+        type: "FUNDO"
       });
 
     expect(isUuid(response.body.id)).toBe(true);
@@ -17,7 +17,7 @@ describe("Assets", () => {
     expect(response.body).toMatchObject({
       name: "apple45",
       value: 100,
-      type: "teste"
+      type: "FUNDO"
     });
   });
   
@@ -27,9 +27,21 @@ describe("Assets", () => {
       .send({
         name: "apple45",
         value: 123456789,
-        type: "teste"
+        type: "FUNDO"
       });
 
     expect(response.body).toMatchObject({error: "The asset value must not exceed 8 decimal places"});
+  });
+  
+  it("Should be valid asset type (RV,RF or FUNDO).", async () => {
+    const response = await request(app)
+      .post("/assets")
+      .send({
+        name: "apple45",
+        value: 200.00,
+        type: "TIPO_ERRADO"
+      });
+
+    expect(response.body).toMatchObject({error: "Not valid asset type."});
   });
 });

@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
  const { v4: uuid, validate: isUuid } = require('uuid');
+const { response } = require("express");
 
 const app = express();
 
@@ -30,6 +31,22 @@ app.post("/assets", (request, response) => {
 
   assets.push(asset);
   return response.json(asset);
+});
+
+app.put("/assets/:id", (request, response) => {
+  const {name, value, type} = request.body;
+  const {id} = request.params;
+
+  const assetIndex = assets.findIndex(asset => asset.id == id);
+  if(assetIndex < 0 ){
+    return response.status(404).json({error: "Asset not found."});
+  }
+
+  assets[assetIndex].name = name;
+  assets[assetIndex].value = value;
+  assets[assetIndex].type = type;
+
+  return response.json(assets[assetIndex]);
 });
 
 module.exports = app;

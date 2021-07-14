@@ -44,4 +44,34 @@ describe("Assets", () => {
 
     expect(response.body).toMatchObject({error: "Not valid asset type."});
   });
+
+  it("should be able to update asset", async () => {
+    const asset = await request(app)
+    .post("/assets")
+    .send({
+      name: "viavarejo15",
+      value: 100,
+      type: "RV"
+    });
+
+  
+    const response = await request(app)
+    .put(`/assets/${asset.body.id}`)
+    .send({
+      name: "petro20",
+      value: 500,
+      type: "RV"
+    });
+    console.log(response.body);
+  
+ 
+    expect(isUuid(response.body.id)).toBe(true);
+
+    expect(response.body).toMatchObject({
+      id: asset.body.id,
+      name: "petro20",
+      value: 500,
+      type: "RV"
+    });
+  });
 });

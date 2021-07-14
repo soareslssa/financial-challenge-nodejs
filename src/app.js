@@ -35,7 +35,7 @@ app.put("/balance/entry/:id", (request, response) => {
   const accountIndex = accounts.findIndex(account => account.id == id);
 
   if (accountIndex < 0) {
-    return response.status(400).json({error: "account not found."});
+    return response.status(404).json({error: "account not found."});
   }
 
   accounts[accountIndex].balance += value;
@@ -52,7 +52,7 @@ app.put("/balance/out/:id", (request, response) => {
   const accountIndex = accounts.findIndex(account => account.id == id);
 
   if (accountIndex < 0) {
-    return response.status(400).json({error: "account not found."});
+    return response.status(404).json({error: "account not found."});
   }
 
   if((accounts[accountIndex].balance - value) < 0){

@@ -15,11 +15,12 @@
   },
   "husky": {
     "hooks": {
-      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
-  },  
+  },
   "devDependencies": {
     "commitizen": "^4.2.4",
+    "commitlint": "^12.1.4",
     "cz-conventional-changelog": "3.3.0",
     "husky": "^7.0.1",
     "jest": "^25.2.6",

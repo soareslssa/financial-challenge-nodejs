@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
  const { v4: uuid, validate: isUuid } = require('uuid');
-const { response } = require("express");
+const { response, request } = require("express");
 
 const app = express();
 
@@ -47,6 +47,18 @@ app.put("/assets/:id", (request, response) => {
   assets[assetIndex].type = type;
 
   return response.json(assets[assetIndex]);
+});
+
+app.delete("/assets/:id", (request, response) => {
+  const id = request.params;
+
+  const assetIndex = assets.findIndex(asset => asset.id == id);
+  if(assetIndex < 0 ){
+    return response.status(404).json({error: "Asset not found."});
+  }
+
+  assets.splice(assetIndex,1);
+  return response.status(200).send;
 });
 
 module.exports = app;

@@ -50,7 +50,7 @@ app.put("/assets/:id", (request, response) => {
 });
 
 app.delete("/assets/:id", (request, response) => {
-  const id = request.params;
+  const {id} = request.params;
 
   const assetIndex = assets.findIndex(asset => asset.id == id);
   if(assetIndex < 0 ){

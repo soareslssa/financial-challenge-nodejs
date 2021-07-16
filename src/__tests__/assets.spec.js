@@ -21,6 +21,19 @@ describe("Assets", () => {
     });
   });
   
+  it("validade params", async () => {
+    const response = await request(app)
+      .post("/assets")
+      .send({
+        name: "apple45",
+        value: 100
+      });
+
+    expect(response.body).toMatchObject({
+      error: "all parameters are mandatory"
+    });
+  });
+  
   it("The asset value must not exceed 8 decimal places", async () => {
     const response = await request(app)
       .post("/assets")

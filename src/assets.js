@@ -20,6 +20,15 @@ app.post("/assets", (request, response) => {
   const { name, value, type } = request.body;
   const asset = {id: uuid(),name,value,type};
 
+
+  if (typeof name === "undefined" || name.length == 0 ||
+    typeof value === "undefined" || value.length == 0 ||
+    typeof type === "undefined" || type.length == 0) {
+
+    response.status(500).json({ error: "all parameters are mandatory" });
+    return;
+  }
+
   if(value.toString().length > 8){
     return response.status(500).json({error: "The asset value must not exceed 8 decimal places"});
   }
@@ -36,6 +45,15 @@ app.post("/assets", (request, response) => {
 app.put("/assets/:id", (request, response) => {
   const {name, value, type} = request.body;
   const {id} = request.params;
+
+
+  if (typeof name === "undefined" || name.length == 0 ||
+    typeof value === "undefined" || value.length == 0 ||
+    typeof type === "undefined" || type.length == 0) {
+
+    response.status(500).json({ error: "all parameters are mandatory" });
+    return;
+  }
 
   const assetIndex = assets.findIndex(asset => asset.id == id);
   if(assetIndex < 0 ){
